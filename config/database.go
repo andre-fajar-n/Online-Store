@@ -19,6 +19,8 @@ type DBConfig struct {
 	Name     string
 }
 
+var ConnDB *gorm.DB
+
 func ConnectDB() *gorm.DB {
 	log.Println("Connecting DB...")
 
@@ -27,7 +29,7 @@ func ConnectDB() *gorm.DB {
 		logger.Config{
 			SlowThreshold: time.Second,   // Slow SQL threshold
 			LogLevel:      logger.Silent, // Log level
-			Colorful:      false,         // Disable color
+			Colorful:      true,          // Enable color
 		},
 	)
 
@@ -52,6 +54,8 @@ func ConnectDB() *gorm.DB {
 		panic("Failed to connect to database!")
 	}
 	log.Println("Database connection success!")
+
+	ConnDB = db.Debug()
 
 	return db
 }

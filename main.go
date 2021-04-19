@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/andre-fajar-n/Online-Store/config"
@@ -56,11 +57,19 @@ func parseCommand(text []string) {
 func runServer() {
 	r := gin.Default()
 
+	// connect db
+	config.ConnectDB()
+
 	// initialize route
 	route.Route(r)
 
-	// connect db
-	config.ConnectDB()
+	// route not found
+	r.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusNotFound, gin.H{
+			"en": "route not found",
+			"id": "route tidak ditemukan",
+		})
+	})
 
 	r.Run(":7000")
 }
