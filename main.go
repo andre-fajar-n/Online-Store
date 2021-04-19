@@ -8,6 +8,7 @@ import (
 	"github.com/andre-fajar-n/Online-Store/config"
 	"github.com/andre-fajar-n/Online-Store/models"
 	"github.com/andre-fajar-n/Online-Store/route"
+	"github.com/andre-fajar-n/Online-Store/seed"
 	"github.com/gin-gonic/gin"
 )
 
@@ -47,6 +48,8 @@ func parseCommand(text []string) {
 		runServer()
 	case "migrate":
 		runMigrate()
+	case "seed":
+		runSeed()
 	}
 }
 
@@ -80,4 +83,9 @@ func runMigrate() {
 	}
 
 	log.Println("Success Migration!")
+}
+
+func runSeed() {
+	db := config.ConnectDB()
+	seed.UserSeed(db)
 }
