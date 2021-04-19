@@ -1,28 +1,83 @@
 package main
 
 import (
-	"net/http"
+	"fmt"
+	"log"
+	"os"
 
 	"github.com/andre-fajar-n/Online-Store/config"
+	"github.com/andre-fajar-n/Online-Store/models"
+	"github.com/andre-fajar-n/Online-Store/route"
 	"github.com/gin-gonic/gin"
 )
 
-func main() {
-	r := setupRouter()
+const (
+	serve   = "serve"
+	migrate = "migrate"
+)
 
-	r.Run(":7000")
+var commandType = map[string]string{
+	serve:   "Run Server",
+	migrate: "Migrate Database",
 }
 
-func setupRouter() *gin.Engine {
+func main() {
+	args := os.Args
+
+	if len(args) == 1 {
+		fmt.Println("Invalid command")
+		fmt.Println("Please add one of this command type in command, e.g go run main go", serve)
+
+		i := 1
+		for key, value := range commandType {
+			fmt.Println(i, key, ": used to", value)
+			i++
+		}
+		os.Exit(0)
+	}
+
+	parseCommand(args)
+}
+
+func parseCommand(text []string) {
+	log.Println("Process", text)
+
+	switch text[1] {
+	case "serve":
+		runServer()
+	case "migrate":
+		runMigrate()
+	}
+}
+
+func runServer() {
 	r := gin.Default()
 
-	// ping test
-	r.GET("ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "ping success")
-	})
+	// initialize route
+	route.Route(r)
 
 	// connect db
 	config.ConnectDB()
 
-	return r
+	r.Run(":7000")
+}
+
+func runMigrate() {
+	db := config.ConnectDB()
+
+	log.Println("Start Migration...")
+
+	if err := db.AutoMigrate(&models.User{}, &models.Product{}); err != nil {
+		panic(err)
+	}
+
+	if err := db.AutoMigrate(&models.Order{}); err != nil {
+		panic(err)
+	}
+
+	if err := db.AutoMigrate(&models.OrderDetail{}); err != nil {
+		panic(err)
+	}
+
+	log.Println("Success Migration!")
 }
