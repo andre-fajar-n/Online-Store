@@ -88,4 +88,5 @@ func runMigrate() {
 func runSeed() {
 	db := config.ConnectDB()
 	seed.UserSeed(db)
+	seed.ProductSeed(db)
 }
