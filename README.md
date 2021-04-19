@@ -25,7 +25,7 @@ To run this apps, follow these steps in sequence
 
 ## Entity Relationship Diagram (ERD)
 This is simple diagram database for this problem
-[](erd.png)
+![](erd.png)
 
 ## API endpoints
 - Method: ```GET```, ```baseURI/api/v1/online-store/ping``` to check if the API is running or not
