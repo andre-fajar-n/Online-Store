@@ -17,8 +17,5 @@ func Route(router *gin.Engine) {
 		c.String(http.StatusOK, "PING")
 	})
 
-	cartController := controllers.Controller{
-		StatusCode: http.StatusOK,
-	}
-	v1Router.POST("cart", cartController.AddToCart)
+	v1Router.POST("cart", controllers.AddToCart)
 }

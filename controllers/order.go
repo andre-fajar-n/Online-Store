@@ -7,19 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Controller struct {
-	StatusCode   int
-	orderService services.OrderService
-}
-
-func (c *Controller) AddToCart(ctx *gin.Context) {
+func AddToCart(ctx *gin.Context) {
 	req := new(models.CartRequest)
 	if err := ctx.Bind(req); err != nil {
 		helpers.DefaultErrorBadRequest(ctx, helpers.InvalidRequestBody)
 		return
 	}
 
-	if err := c.orderService.AddToCart(req); err != nil {
+	if err := services.AddToCart(req); err != nil {
 		helpers.ReturnError(ctx, err)
 		return
 	}

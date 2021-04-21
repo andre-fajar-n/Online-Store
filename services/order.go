@@ -11,18 +11,13 @@ const (
 	StatusOrderCart = "CART"
 )
 
-type OrderService struct {
-	orderRepo    repositories.OrderRepo
-	orderProduct repositories.ProductRepo
-}
-
-func (s *OrderService) AddToCart(data *models.CartRequest) error {
+func AddToCart(data *models.CartRequest) error {
 	if err := order.Validate(data); err != nil {
 		return err
 	}
 
 	// check if productID is exist
-	product, err := s.orderProduct.GetByID(data.ProductID)
+	product, err := repositories.GetOneProductByID(data.ProductID)
 	if err != nil {
 		return helpers.ErrorValidation(&helpers.ErrorResponse{
 			En: "Invalid productID",
@@ -45,7 +40,7 @@ func (s *OrderService) AddToCart(data *models.CartRequest) error {
 		})
 	}
 
-	if err := s.orderRepo.Create(data); err != nil {
+	if err := repositories.CreateCart(data); err != nil {
 		return err
 	}
 
