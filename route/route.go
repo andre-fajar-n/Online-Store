@@ -18,4 +18,5 @@ func Route(router *gin.Engine) {
 	})
 
 	v1Router.POST("cart", controllers.AddToCart)
+	v1Router.POST("checkout", controllers.Checkout)
 }

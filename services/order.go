@@ -46,3 +46,39 @@ func AddToCart(data *models.CartRequest) error {
 
 	return nil
 }
+
+func Checkout(data *models.CartRequest) error {
+	if err := order.Validate(data); err != nil {
+		return err
+	}
+
+	// check if productID is exist
+	_, err := repositories.GetOneProductByID(data.ProductID)
+	if err != nil {
+		return helpers.ErrorValidation(&helpers.ErrorResponse{
+			En: "Invalid productID",
+			Id: "ProductID tidak valid",
+		})
+	}
+
+	availProduct, err := repositories.CountProductAvailable(data.ProductID, data.CustomerID)
+	if err != nil {
+		return helpers.ErrorBadRequest(&helpers.ErrorResponse{
+			En: err.Error(),
+			Id: err.Error(),
+		})
+	}
+
+	if availProduct < int64(data.Quantity) {
+		return helpers.ErrorValidation(&helpers.ErrorResponse{
+			En: "The stock of this product is lacking or empty",
+			Id: "Persediaan produk ini tidak cukup atau habis",
+		})
+	}
+
+	if err := repositories.Checkout(data); err != nil {
+		return err
+	}
+
+	return nil
+}

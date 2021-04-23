@@ -45,7 +45,7 @@ func ErrorValidation(err *ErrorResponse) error {
 
 func ErrorBadRequest(err *ErrorResponse) error {
 	msgByte, _ := json.Marshal(err)
-	return fmt.Errorf("%d:%s", http.StatusUnprocessableEntity, string(msgByte))
+	return fmt.Errorf("%d:%s", http.StatusBadRequest, string(msgByte))
 }
 
 func DefaultErrorBadRequest(c *gin.Context, errType string) {
