@@ -23,6 +23,16 @@ var commandType = map[string]string{
 	migrate: "Migrate Database",
 }
 
+// @title Orders API
+// @version 1.0
+// @description This is a sample serice for managing orders
+// @termsOfService http://swagger.io/terms/
+// @contact.name API Support
+// @contact.email soberkoder@swagger.io
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host localhost:7000
+// @BasePath /api/v1/online-store
 func main() {
 	args := os.Args
 

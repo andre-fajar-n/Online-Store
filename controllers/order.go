@@ -7,6 +7,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// AddToCart godoc
+// @Summary Add product to cart
+// @Description Add product to cart
+// @Tags orders
+// @Accept  json
+// @Produce  json
+// @Param order body CartRequest true "Cart request"
+// @Success 201 {array} CartRequest
+// @Router /cart [post]
 func AddToCart(ctx *gin.Context) {
 	req := new(models.CartRequest)
 	if err := ctx.Bind(req); err != nil {
@@ -20,6 +29,12 @@ func AddToCart(ctx *gin.Context) {
 	}
 
 	helpers.SuccessCreate(ctx, nil)
+}
+
+type CartRequest struct {
+	ProductID  uint `json:"product_id"`
+	CustomerID uint `json:"customer_id"`
+	Quantity   uint `json:"quantity"`
 }
 
 func Checkout(ctx *gin.Context) {

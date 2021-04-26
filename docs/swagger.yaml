@@ -1,4 +1,49 @@
+basePath: /api/v1/online-store
+definitions:
+  controllers.CartRequest:
+    properties:
+      customer_id:
+        type: integer
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+    type: object
+host: localhost:7000
 info:
-  contact: {}
-paths: {}
+  contact:
+    email: soberkoder@swagger.io
+    name: API Support
+  description: This is a sample serice for managing orders
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Orders API
+  version: "1.0"
+paths:
+  /cart:
+    post:
+      consumes:
+      - application/json
+      description: Add product to cart
+      parameters:
+      - description: Cart request
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CartRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            items:
+              $ref: '#/definitions/controllers.CartRequest'
+            type: array
+      summary: Add product to cart
+      tags:
+      - orders
 swagger: "2.0"
