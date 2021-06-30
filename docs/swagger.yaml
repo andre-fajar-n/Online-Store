@@ -1,6 +1,13 @@
 basePath: /api/v1/online-store
 definitions:
-  controllers.CartRequest:
+  helpers.Response:
+    properties:
+      en:
+        type: string
+      id:
+        type: string
+    type: object
+  models.CartRequest:
     properties:
       customer_id:
         type: integer
@@ -33,16 +40,44 @@ paths:
         name: order
         required: true
         schema:
-          $ref: '#/definitions/controllers.CartRequest'
+          $ref: '#/definitions/models.CartRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            items:
-              $ref: '#/definitions/controllers.CartRequest'
-            type: array
+            $ref: '#/definitions/helpers.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Add product to cart
+      tags:
+      - orders
+  /checkout:
+    post:
+      consumes:
+      - application/json
+      description: Add product to cart
+      parameters:
+      - description: Cart request
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.CartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.Response'
       summary: Add product to cart
       tags:
       - orders

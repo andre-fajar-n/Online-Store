@@ -21,12 +21,12 @@ Based on my analysis above, I have some idea to solve this problem.
 To run this apps, follow these steps in sequence
 1. Migrate database ```go run main.go migrate```
 2. Insert some data of users and product ```go run main.go seed```
-3. Run API server ```go run main.go serve```
+3. To update swagger api docs ```$HOME/go/bin/swag init``` or ```swag init```
+4. Run API server ```go run main.go api```
 
 ## Entity Relationship Diagram (ERD)
 This is simple diagram database for this problem
 [](erd.png)
 
-## API endpoints
-- Method: ```GET```, ```baseURI/api/v1/online-store/ping``` to check if the API is running or not
-- Method: ```POST```, ```baseURI/api/v1/online-store/cart``` to add product in cart
+## Swagger API docs
+- ```http://localhost:7000/swagger/index.html```

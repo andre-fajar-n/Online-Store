@@ -7,21 +7,21 @@ import (
 
 func Validate(req *models.CartRequest) error {
 	if req.CustomerID <= 0 {
-		return helpers.ErrorValidation(&helpers.ErrorResponse{
+		return helpers.ErrorValidation(&helpers.Response{
 			En: "CustomerID must be more than 0",
 			Id: "CustomerID harus lebih dari 0",
 		})
 	}
 
 	if req.ProductID <= 0 {
-		return helpers.ErrorValidation(&helpers.ErrorResponse{
+		return helpers.ErrorValidation(&helpers.Response{
 			En: "ProductID must be more than 0",
 			Id: "ProductID harus lebih dari 0",
 		})
 	}
 
 	if req.Quantity <= 0 {
-		return helpers.ErrorValidation(&helpers.ErrorResponse{
+		return helpers.ErrorValidation(&helpers.Response{
 			En: "Quantity must be more than 0",
 			Id: "Quantity harus lebih dari 0",
 		})

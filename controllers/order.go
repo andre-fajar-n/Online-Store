@@ -13,8 +13,9 @@ import (
 // @Tags orders
 // @Accept  json
 // @Produce  json
-// @Param order body CartRequest true "Cart request"
-// @Success 201 {array} CartRequest
+// @Param order body models.CartRequest true "Cart request"
+// @Success 201 {object} helpers.Response
+// @Failure 400 {object} helpers.Response
 // @Router /cart [post]
 func AddToCart(ctx *gin.Context) {
 	req := new(models.CartRequest)
@@ -31,12 +32,16 @@ func AddToCart(ctx *gin.Context) {
 	helpers.SuccessCreate(ctx, nil)
 }
 
-type CartRequest struct {
-	ProductID  uint `json:"product_id"`
-	CustomerID uint `json:"customer_id"`
-	Quantity   uint `json:"quantity"`
-}
-
+// AddToCart godoc
+// @Summary Add product to cart
+// @Description Add product to cart
+// @Tags orders
+// @Accept  json
+// @Produce  json
+// @Param order body models.CartRequest true "Cart request"
+// @Success 201 {object} helpers.Response
+// @Failure 400 {object} helpers.Response
+// @Router /checkout [post]
 func Checkout(ctx *gin.Context) {
 	req := new(models.CartRequest)
 	if err := ctx.Bind(req); err != nil {

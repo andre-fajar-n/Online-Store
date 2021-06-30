@@ -14,7 +14,22 @@ const (
 	InvalidRequestBody = "Invalid request body"
 )
 
-type ErrorResponse struct {
+var (
+	DefaultSuccessResponse = Response{
+		En: "Success",
+		Id: "Sukses",
+	}
+	DefaultBadRequestResponse = Response{
+		En: "Bad request",
+		Id: "Permintaan buruk",
+	}
+	DefaultInvalidRequestBodyOrParam = Response{
+		En: "Invalid request body or param",
+		Id: "Request body atau param tidak valid",
+	}
+)
+
+type Response struct {
 	En string `json:"en"`
 	Id string `json:"id"`
 }
@@ -22,13 +37,13 @@ type ErrorResponse struct {
 func ReturnError(c *gin.Context, errRes error) {
 	errStr := errRes.Error()
 	errSplit := strings.SplitN(errStr, ":", 2)
-	msg := new(ErrorResponse)
+	msg := new(Response)
 	if len(errSplit) > 1 {
 		_ = json.Unmarshal([]byte(errSplit[1]), &msg)
 	}
 	statusCode, err := strconv.Atoi(errSplit[0])
 	if err != nil || msg == nil {
-		c.JSON(http.StatusInternalServerError, ErrorResponse{
+		c.JSON(http.StatusInternalServerError, Response{
 			En: "Internal server error",
 			Id: "Terjadi kesalahan di server",
 		})
@@ -38,29 +53,23 @@ func ReturnError(c *gin.Context, errRes error) {
 	c.JSON(statusCode, msg)
 }
 
-func ErrorValidation(err *ErrorResponse) error {
+func ErrorValidation(err *Response) error {
 	msgByte, _ := json.Marshal(err)
 	return fmt.Errorf("%d:%s", http.StatusUnprocessableEntity, string(msgByte))
 }
 
-func ErrorBadRequest(err *ErrorResponse) error {
+func ErrorBadRequest(err *Response) error {
 	msgByte, _ := json.Marshal(err)
 	return fmt.Errorf("%d:%s", http.StatusBadRequest, string(msgByte))
 }
 
 func DefaultErrorBadRequest(c *gin.Context, errType string) {
-	msg := new(ErrorResponse)
+	var msg = new(Response)
 	switch errType {
 	case InvalidRequestBody:
-		msg = &ErrorResponse{
-			En: "Invalid request body",
-			Id: "Request body tidak valid",
-		}
+		msg = &DefaultInvalidRequestBodyOrParam
 	default:
-		msg = &ErrorResponse{
-			En: "Bad request",
-			Id: "Permintaan buruk",
-		}
+		msg = &DefaultBadRequestResponse
 	}
 
 	c.JSON(http.StatusBadRequest, msg)
@@ -69,10 +78,7 @@ func DefaultErrorBadRequest(c *gin.Context, errType string) {
 // SuccessCreate if there is no data, can fill data with nil
 func SuccessCreate(c *gin.Context, data interface{}) {
 	if data == nil {
-		c.JSON(http.StatusCreated, gin.H{
-			"en": "Success",
-			"id": "Sukses",
-		})
+		c.JSON(http.StatusCreated, DefaultSuccessResponse)
 	} else {
 		c.JSON(http.StatusCreated, data)
 	}

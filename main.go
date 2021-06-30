@@ -14,12 +14,12 @@ import (
 )
 
 const (
-	serve   = "serve"
+	api     = "api"
 	migrate = "migrate"
 )
 
 var commandType = map[string]string{
-	serve:   "Run Server",
+	api:     "Run Server",
 	migrate: "Migrate Database",
 }
 
@@ -38,7 +38,7 @@ func main() {
 
 	if len(args) == 1 {
 		fmt.Println("Invalid command")
-		fmt.Println("Please add one of this command type in command, e.g go run main go", serve)
+		fmt.Println("Please add one of this command type in command, e.g go run main go", api)
 
 		i := 1
 		for key, value := range commandType {
@@ -55,9 +55,9 @@ func parseCommand(text []string) {
 	log.Println("Process", text)
 
 	switch text[1] {
-	case "serve":
+	case api:
 		runServer()
-	case "migrate":
+	case migrate:
 		runMigrate()
 	case "seed":
 		runSeed()
